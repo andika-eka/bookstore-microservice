@@ -26,6 +26,7 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 
+
 //Products
 Route::get('/catalog', [ProductsController::class, 'index']);
 Route::get('/create', [ProductsController::class, 'create']);
