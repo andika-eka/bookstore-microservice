@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Refunds;
+use App\Models\Refund;
 use Illuminate\Http\Request;
 
 class RefundsController extends Controller
@@ -14,7 +14,7 @@ class RefundsController extends Controller
      */
     public function index()
     {
-        $data = Refunds::all();
+        $data = Refund::all();
         //  $data = Refunds::with('products');
          return view('refund.index')// taruh blade disini
          ->with("data", $data);
@@ -46,7 +46,7 @@ class RefundsController extends Controller
             'ID_SALES.required'=>'ID_SALES Wajib Diisi!',
             'RESELLABLE.required'=>'RESELLABLE Wajib Diisi!'
         ]);
-        Refunds::create([
+        Refund::create([
             'ID_SALES' => $request->ID_SALES,
             'RESELLABLE' => $request->RESELLABLE
         ]);
@@ -72,7 +72,7 @@ class RefundsController extends Controller
      */
     public function edit($id)
     {
-        $data = Refunds::find($id);
+        $data = Refund::find($id);
         return view('refund.edit', ['data' => $data]);
     }
 
@@ -93,7 +93,7 @@ class RefundsController extends Controller
             'ID_SALES.required'=>'ID_SALES Wajib Diisi!',
             'RESELLABLE.required'=>'RESELLABLE Wajib Diisi!'
         ]);
-        $data = Refunds::find($id);
+        $data = Refund::find($id);
         $data->update($request->all());
         return redirect('/refunds')->with('status', 'Data Berhasil Diubah');
     }
@@ -106,7 +106,7 @@ class RefundsController extends Controller
      */
     public function delete($id)
     {
-        $data = Refunds::find($id);
+        $data = Refund::find($id);
         $data->delete();
         return redirect('/refunds')->with('status', 'Data Berhasil Dihapus');
     }
