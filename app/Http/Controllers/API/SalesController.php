@@ -52,6 +52,9 @@ class SalesController extends Controller
     public function show($id)
     {
         //
+        $data = Sale::find($id);
+        $data->product;
+        return Response()->json($data);
     }
 
     /**

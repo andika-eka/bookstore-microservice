@@ -52,7 +52,7 @@ class ProductsController extends Controller
     {
         //
         $data =  Product::find($id);
-        $sale = $data->sal;
+        $data->sale; //a bit weird but it works
         return Response()->json($data);
     }
 
