@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Sale;
 use App\Models\Product;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 class SalesController extends Controller
 {
     /**
@@ -41,6 +41,34 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'REFUND'=> 'required',
+            'product_id'=> 'required',
+        ]);
+        DB::beginTransaction();
+        try{
+            $response = Sale::create([
+                'REFUND' => $request->REFUND,
+                'product_id' => $request->product_id,
+            ]);
+            $product = Product::find($request->product_id);
+            $product -> STOK  = $product -> STOK - 1;
+            $product ->save();
+            DB::commit();
+            return response()->json([
+                'data' => $response,
+                'success' => true,
+                'notif'=>'sale berhasil di daftarkan',     
+            ],200);
+        }
+        catch (\Exception $e){
+            DB:rollback();
+            return response()->json([
+                'message' => $e,
+                'success' => false,
+                'notif'=>'Error',               
+            ], 422);
+        }
     }
 
     /**
