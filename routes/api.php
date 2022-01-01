@@ -7,6 +7,7 @@ use App\Http\Controllers\API\SalesController;
 use App\Http\Controllers\API\RefundsController;
 use App\Http\Controllers\API\AuthController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,5 +29,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::resource('products', ProductsController::class);
     Route::resource('sales', SalesController::class);
     Route::resource('refunds', RefundsController::class);
+   
 });
 
