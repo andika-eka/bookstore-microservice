@@ -146,8 +146,8 @@ class ProductsController extends Controller
     {
         //
         try{
-            $data = Product::find($id);       //cari id yang dipencet
-            $data-> delete();                  //delete id tersebut
+            $data = Product::find($id);       
+            $data-> delete();                  
             return response()->json([
                 'success' => true,
                 'notif'=>'berhasil delete data',                
