@@ -77,7 +77,7 @@ class SalesController extends Controller
             ],200);
         }
         catch (\Exception $e){
-            DB:rollback();
+            DB::rollback();
             return response()->json([
                 'message' => $e,
                 'success' => false,
@@ -173,6 +173,7 @@ class SalesController extends Controller
                 'notif'=>'berhasil delete data',                
             ]);
         }catch (\Exception $e) {
+            DB::rollback();
             return response()->json([
                 'success' => false,
                 'notif'=>$e,               
