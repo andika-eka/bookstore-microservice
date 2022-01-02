@@ -7,6 +7,7 @@ use App\Models\Sale;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 class SalesController extends Controller
 {
     /**
@@ -54,11 +55,25 @@ class SalesController extends Controller
             $product = Product::find($request->product_id);
             $product -> STOK  = $product -> STOK - 1;
             $product ->save();
+
+            if($product -> STOK < 10 ){
+                $notification = Http::withHeaders([
+                    'Accept' => 'application/json',
+                ])->post('http://localhost:3000/notif',[
+                    'reqId' => "req-0002",
+                    'title' => "Almost sold Out:" . $product->NAMA ,
+                    'description' =>"only ". $product->STOK . " left",
+                    'category' => "product-alert"
+                ]);
+            }
+            
+
             DB::commit();
             return response()->json([
                 'data' => $response,
                 'success' => true,
-                'notif'=>'sale berhasil di daftarkan',     
+                'notif'=>'sale berhasil di daftarkan',
+                'notifcationSent' => $notification,     
             ],200);
         }
         catch (\Exception $e){

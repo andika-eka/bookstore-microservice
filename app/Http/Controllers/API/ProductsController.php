@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Http;
+
 
 class ProductsController extends Controller
 {
@@ -55,10 +57,20 @@ class ProductsController extends Controller
                 'HARGA_JUAL' => $request->HARGA_JUAL,
                 'STOK' => $request->STOK
             ]);
+
+            $notification = Http::withHeaders([
+                'Accept' => 'application/json',
+            ])->post('http://localhost:3000/notif',[
+                'reqId' => "req-0001",
+                'title' => "New Product availlable :" . $request->NAMA ,
+                'description' =>"only Rp.". $request->HARGA_JUAL,
+                'category' => "new-book"
+            ]);
             return response()->json([
                 'data' => $response,
                 'success' => true,
-                'notif'=>'product berhasil di daftarkan',     
+                'notif'=>'product berhasil di daftarkan', 
+                'notifcationSent' => $notification,
             ],200);
         }
         catch (\Exception $e){
