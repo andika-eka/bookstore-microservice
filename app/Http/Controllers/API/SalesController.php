@@ -80,9 +80,18 @@ class SalesController extends Controller
     public function show($id)
     {
         //
-        $data = Sale::find($id);
-        $data->product;
-        return Response()->json($data);
+        try{
+            $data = Sale::find($id);
+            $data->product;
+            return Response()->json($data);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                'message' => $e,
+                'success' => false,
+                'notif'=>'data not found',               
+            ], 422);
+        }
     }
 
     /**

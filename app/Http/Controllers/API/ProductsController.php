@@ -80,9 +80,18 @@ class ProductsController extends Controller
     public function show($id)
     {
         //
-        $data =  Product::find($id);
-        $data->sale; //a bit weird but it works
-        return Response()->json($data);
+        try{
+            $data =  Product::find($id);
+            $data->sale; //a bit weird but it works
+            return Response()->json($data);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                'message' => $e,
+                'success' => false,
+                'notif'=>'data not found',               
+            ], 422);
+        }
     }
 
     /**
