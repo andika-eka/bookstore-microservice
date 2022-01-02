@@ -106,6 +106,25 @@ class SalesController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        $request->validate([
+            'REFUND'=> 'required'
+        ]);
+        try{
+            $data = Sale::find($id);
+            $data->update($request->all()); return response()->json([
+                'data' => $data,
+                'success' => true,
+                'notif'=>'product berhasil diupdate',     
+            ],200);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                'message' => $e,
+                'success' => false,
+                'notif'=>'Error',               
+            ], 422);
+        }
     }
 
     /**
@@ -117,5 +136,23 @@ class SalesController extends Controller
     public function destroy($id)
     {
         //
+        DB::beginTransaction();
+        try{
+            $data = Sale::find($id);
+            $data->delete();
+            $product = Product::find($data->product_id);
+            $product -> STOK  = $product -> STOK + 1;
+            $product->save();
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'notif'=>'berhasil delete data',                
+            ]);
+        }catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'notif'=>$e,               
+            ], 422);
+        } 
     }
 }
